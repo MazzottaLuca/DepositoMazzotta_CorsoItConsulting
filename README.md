@@ -1,2 +1,2 @@
 # DepositoMazzotta_CorsoItConsulting
-Luca Mazzotta lucamazzotta99@gmial.com
+Luca Mazzotta lucamazzotta99@gmail.com
