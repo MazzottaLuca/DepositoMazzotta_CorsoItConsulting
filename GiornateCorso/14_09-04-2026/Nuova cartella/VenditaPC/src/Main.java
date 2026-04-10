@@ -5,7 +5,7 @@ import strategies.*;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        // La Facade nasconde tutta la complessità degli altri pattern 
+        // La Facade nasconde tutta la complessità degli altri pattern
         SistemaOrdineFacade negozio = new SistemaOrdineFacade();
 
         System.out.println("=== BENVENUTO NEL SISTEMA VENDITAPC ===");
@@ -18,11 +18,12 @@ public class Main {
 
         if (sceltaBase == 2) {
             negozio.selezionaBase("gaming");
-        } else {
+        } else if (sceltaBase == 1) {
             negozio.selezionaBase("ufficio");
-        }
+        } else
+            System.out.println("inserisci opzione corretta");
 
-        // 2. AGGIUNTA COMPONENTI EXTRA 
+        // 2. AGGIUNTA COMPONENTI EXTRA
         boolean continua = true;
         while (continua) {
             System.out.println("\nCosa vuoi aggiungere?");
@@ -30,7 +31,7 @@ public class Main {
             System.out.println("2. SSD Extra (+100€)");
             System.out.println("3. GPU Potenziata (+600€)");
             System.out.println("0. Vai al pagamento");
-            
+
             int sceltaExtra = scanner.nextInt();
 
             switch (sceltaExtra) {
@@ -50,9 +51,10 @@ public class Main {
 
         if (sceltaPagamento == 2) {
             negozio.scegliMetodoPagamento(new PagamentoPaypal());
-        } else {
+        } else if (sceltaPagamento == 1) {
             negozio.scegliMetodoPagamento(new PagamentoCarta());
-        }
+        } else
+            System.out.println("inserisci opzione corretta");
 
         // 4. CONCLUSIONE TRAMITE FACADE
         negozio.completaOrdine();
