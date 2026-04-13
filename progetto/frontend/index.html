@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progetto Frontend</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { margin: 5px; padding: 10px; }
+        input { margin: 5px; padding: 5px; }
+        #results { margin-top: 20px; border: 1px solid #ccc; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Progetto API Frontend</h1>
+
+    <h2>Saluto</h2>
+    <button onclick="saluta()">Invia Saluto</button>
+
+    <h2>Somma</h2>
+    <button onclick="somma()">Calcola Somma</button>
+
+    <h2>Ordina</h2>
+    <input type="text" id="ordineInput" placeholder="Messaggio ordine">
+    <button onclick="ordina()">Invia Ordine</button>
+
+    <h2>Prodotti</h2>
+    <button onclick="getProdotti()">Ottieni Tutti i Prodotti</button>
+    <br>
+    <input type="text" id="prodottoNome" placeholder="Nome prodotto">
+    <input type="number" id="prodottoPrezzo" placeholder="Prezzo">
+    <button onclick="creaProdotto()">Crea Prodotto</button>
+    <br>
+    <input type="number" id="prodottoId" placeholder="ID Prodotto">
+    <button onclick="getProdottoById()">Ottieni Prodotto per ID</button>
+    <button onclick="aggiornaProdotto()">Aggiorna Prodotto</button>
+    <button onclick="eliminaProdotto()">Elimina Prodotto</button>
+
+    <div id="results"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
