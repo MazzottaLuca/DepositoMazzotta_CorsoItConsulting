@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ToDo Relazionale</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f7fb;
+      color: #212121;
+    }
+    header {
+      background: #2f80ed;
+      color: white;
+      padding: 24px 32px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    main {
+      padding: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      margin-top: 24px;
+    }
+    section {
+      background: white;
+      border-radius: 12px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.08);
+    }
+    section h2 {
+      margin-top: 0;
+      color: #333;
+    }
+    form {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    input, select, button, textarea {
+      font: inherit;
+      border: 1px solid #cbd5e0;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    button {
+      cursor: pointer;
+      background: #2f80ed;
+      color: white;
+      border: none;
+      transition: background 0.2s ease;
+    }
+    button:hover {
+      background: #1d6ad4;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    li {
+      padding: 12px 10px;
+      border-bottom: 1px solid #e0e7ff;
+      display: grid;
+      gap: 8px;
+    }
+    li:last-child {
+      border-bottom: none;
+    }
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .item-label {
+      font-weight: 600;
+      color: #192a56;
+    }
+    .item-meta {
+      color: #555;
+      font-size: 0.95rem;
+    }
+    .small-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .secondary {
+      background: #64748b;
+    }
+    .secondary:hover {
+      background: #4b6479;
+    }
+    .danger {
+      background: #eb5757;
+    }
+    .danger:hover {
+      background: #c83b3b;
+    }
+    .message {
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .message.visible {
+      display: block;
+    }
+    .message.info { background: #dbeafe; color: #1e293b; }
+    .message.error { background: #fee2e2; color: #991b1b; }
+    .details {
+      font-size: 0.95rem;
+      color: #334155;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ToDo Relazionale</h1>
+    <p>Gestisci utenti, attività e commenti con tutte le chiamate API.</p>
+  </header>
+  <main>
+    <div id="message" class="message info"></div>
+
+    <div class="grid">
+      <section>
+        <h2>Utenti</h2>
+        <form id="user-form">
+          <input id="user-name" type="text" placeholder="Nome utente" required />
+          <button type="submit">Crea Utente</button>
+        </form>
+        <ul id="user-list"></ul>
+        <div class="details" id="user-details"></div>
+      </section>
+
+      <section>
+        <h2>Todo</h2>
+        <form id="todo-form">
+          <input id="todo-text" type="text" placeholder="Descrizione todo" required />
+          <select id="todo-user" required></select>
+          <button type="submit">Crea Todo</button>
+        </form>
+        <ul id="todo-list"></ul>
+        <div class="details" id="todo-details"></div>
+      </section>
+
+      <section>
+        <h2>Commenti</h2>
+        <form id="comment-form">
+          <textarea id="comment-text" placeholder="Testo commento" rows="3" required></textarea>
+          <select id="comment-todo" required></select>
+          <button type="submit">Aggiungi Commento</button>
+        </form>
+        <ul id="comment-list"></ul>
+      </section>
+
+      <section>
+        <h2>Filtri rapidi</h2>
+        <div>
+          <label for="filter-user">Seleziona utente</label>
+          <select id="filter-user"></select>
+          <button id="load-user-todos" class="secondary">Carica tutti i Todo dell'utente</button>
+        </div>
+        <div style="margin-top: 16px;">
+          <label for="filter-todo">Seleziona Todo</label>
+          <select id="filter-todo"></select>
+          <button id="load-todo-comments" class="secondary">Carica commenti del Todo</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

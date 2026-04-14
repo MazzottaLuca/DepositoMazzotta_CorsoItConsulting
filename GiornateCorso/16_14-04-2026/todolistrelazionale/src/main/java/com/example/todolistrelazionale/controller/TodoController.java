@@ -1,0 +1,64 @@
+package com.example.todolistrelazionale.controller;
+
+import com.example.todolistrelazionale.model.Todo;
+import com.example.todolistrelazionale.model.Commento;
+import com.example.todolistrelazionale.controller.TodoCreateRequest;
+import com.example.todolistrelazionale.service.TodoService;
+import com.example.todolistrelazionale.service.CommentoService;
+import com.example.todolistrelazionale.service.UtenteService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/todo")
+@RequiredArgsConstructor
+public class TodoController {
+
+    private final TodoService todoService;
+    private final CommentoService commentoService;
+    private final UtenteService utenteService;
+
+    @GetMapping
+    public List<Todo> getAllTodo() {
+        return todoService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Todo getTodoById(@PathVariable Long id) {
+        return todoService.findById(id);
+    }
+
+    @PostMapping
+    public Todo createTodo(@RequestBody TodoCreateRequest request) {
+        Todo todo = new Todo();
+        todo.setDescrizione(request.getDescrizione());
+        todo.setCompletato(false);
+        todo.setUtente(utenteService.findById(request.getUtenteId()));
+        return todoService.save(todo);
+    }
+
+    @PutMapping("/{id}")
+    public Todo updateTodo(@PathVariable Long id, @RequestBody Todo modificato) {
+        Todo esistente = todoService.findById(id);
+        esistente.setDescrizione(modificato.getDescrizione());
+        if (modificato.getCompletato() != null) {
+            esistente.setCompletato(modificato.getCompletato());
+        }
+        return todoService.save(esistente);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTodo(@PathVariable Long id) {
+        todoService.delete(id);
+        return ResponseEntity.ok("ToDo eliminato");
+    }
+
+    //  ENDPOINT SPECIFICO: tutti i commenti legati a un ToDo
+    @GetMapping("/{id}/commenti")
+    public List<Commento> getCommentiByTodo(@PathVariable Long id) {
+        return commentoService.findByTodoId(id);
+    }
+}

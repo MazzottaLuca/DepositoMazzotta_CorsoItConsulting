@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List Application</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Todo List</h1>
+
+        <div class="add-todo">
+            <input type="text" id="todo-description" placeholder="Enter todo description" required>
+            <select id="todo-priority">
+                <option value="1">Low</option>
+                <option value="2">Medium</option>
+                <option value="3">High</option>
+            </select>
+            <input type="date" id="todo-due-date">
+            <button onclick="addTodo()">Add Todo</button>
+        </div>
+
+        <div class="filter-section">
+            <select id="status-filter" onchange="filterTodos()">
+                <option value="ALL">All</option>
+                <option value="TODO">Todo</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="DONE">Done</option>
+                <option value="CANCELLED">Cancelled</option>
+            </select>
+        </div>
+
+        <div id="todo-list" class="todo-list">
+            <!-- Todos will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditModal()">&times;</span>
+            <h2>Edit Todo</h2>
+            <input type="text" id="edit-description" placeholder="Description" required>
+            <select id="edit-status">
+                <option value="TODO">Todo</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="DONE">Done</option>
+                <option value="CANCELLED">Cancelled</option>
+            </select>
+            <select id="edit-priority">
+                <option value="1">Low</option>
+                <option value="2">Medium</option>
+                <option value="3">High</option>
+            </select>
+            <input type="date" id="edit-due-date">
+            <button onclick="updateTodo()">Update</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
