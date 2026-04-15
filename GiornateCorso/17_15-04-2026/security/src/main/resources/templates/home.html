@@ -1,0 +1,399 @@
+<!doctype html>
+<html
+  lang="it"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .navbar {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .navbar h1 {
+        font-size: 28px;
+        font-weight: 700;
+      }
+
+      .navbar-user {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .user-info {
+        text-align: right;
+      }
+
+      .user-info p {
+        margin: 3px 0;
+        font-size: 14px;
+      }
+
+      .logout-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px solid white;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .logout-btn:hover {
+        background: white;
+        color: #667eea;
+        transform: translateY(-2px);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .welcome-section {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        text-align: center;
+      }
+
+      .welcome-section h2 {
+        color: #333;
+        margin-bottom: 15px;
+        font-size: 36px;
+        font-weight: 700;
+      }
+
+      .welcome-section p {
+        color: #666;
+        line-height: 1.6;
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+
+      .stats {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 30px;
+      }
+
+      .stat-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        min-width: 120px;
+      }
+
+      .stat-card h3 {
+        font-size: 24px;
+        margin-bottom: 5px;
+      }
+
+      .stat-card p {
+        font-size: 14px;
+        opacity: 0.9;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+
+      .action-card {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border-left: 5px solid #667eea;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .action-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.1) 0%,
+          rgba(118, 75, 162, 0.1) 100%
+        );
+        border-radius: 50%;
+        transform: translate(30px, -30px);
+      }
+
+      .action-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      }
+
+      .action-card h3 {
+        color: #667eea;
+        margin-bottom: 15px;
+        font-size: 22px;
+        font-weight: 600;
+        position: relative;
+        z-index: 1;
+      }
+
+      .action-card p {
+        color: #666;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .action-card a {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 12px 25px;
+        text-decoration: none;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        position: relative;
+        z-index: 1;
+      }
+
+      .action-card a:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .admin-section {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        border-left: 5px solid #ff6b6b;
+        margin-top: 30px;
+      }
+
+      .admin-section h3 {
+        color: #ff6b6b;
+        margin-bottom: 15px;
+        font-size: 24px;
+        font-weight: 600;
+      }
+
+      .admin-section p {
+        color: #666;
+        margin-bottom: 20px;
+        font-size: 16px;
+      }
+
+      .admin-section a {
+        display: inline-block;
+        background: #ff6b6b;
+        color: white;
+        padding: 12px 25px;
+        text-decoration: none;
+        border-radius: 25px;
+        margin-right: 15px;
+        transition: all 0.3s ease;
+        font-weight: 600;
+      }
+
+      .admin-section a:hover {
+        background: #ff5252;
+        transform: translateY(-2px);
+      }
+
+      .role-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-top: 10px;
+      }
+
+      .public-link {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .public-link a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s;
+      }
+
+      .public-link a:hover {
+        color: #764ba2;
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        .navbar {
+          flex-direction: column;
+          gap: 15px;
+          text-align: center;
+        }
+
+        .stats {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .actions {
+          grid-template-columns: 1fr;
+        }
+
+        .welcome-section {
+          padding: 30px 20px;
+        }
+
+        .welcome-section h2 {
+          font-size: 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="navbar">
+      <h1>🚀 Dashboard Sicura</h1>
+      <div class="navbar-user">
+        <div class="user-info">
+          <p>
+            <strong th:text="'Utente: ' + ${#authentication.name}"></strong>
+          </p>
+          <span
+            class="role-badge"
+            th:text="'Ruolo: ' + ${#authentication.authorities}"
+          ></span>
+        </div>
+        <form method="POST" th:action="@{/logout}" style="margin: 0">
+          <!-- rimuovi la riga _csrf manuale, Thymeleaf la aggiunge da solo -->
+          <button type="submit" class="logout-btn">Esci</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Welcome Section -->
+      <div class="welcome-section">
+        <h2>👋 Benvenuto, <span th:text="${#authentication.name}"></span>!</h2>
+        <p>
+          Sei stato autenticato con successo. Questa è la tua dashboard privata
+          dove puoi accedere alle risorse protette.
+        </p>
+        <p>
+          <strong>Accesso abilitato:</strong> Tutte le risorse autenticate sono
+          ora disponibili.
+        </p>
+
+        <!-- Stats -->
+        <div class="stats">
+          <div class="stat-card">
+            <h3>100%</h3>
+            <p>Sicurezza</p>
+          </div>
+          <div class="stat-card">
+            <h3>24/7</h3>
+            <p>Disponibilità</p>
+          </div>
+          <div class="stat-card">
+            <h3>∞</h3>
+            <p>Scalabilità</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <!-- User Section -->
+        <div class="action-card" sec:authorize="hasAnyRole('USER', 'ADMIN')">
+          <h3>👤 Area Utente</h3>
+          <p>
+            Accedi alla tua area personale dove puoi visualizzare i tuoi dati e
+            gestire le tue preferenze.
+          </p>
+          <a href="/user/dashboard">Vai all'area utente</a>
+        </div>
+
+        <!-- Todo Section -->
+        <div class="action-card" sec:authorize="hasAnyRole('USER', 'ADMIN')">
+          <h3>📋 Todo List</h3>
+          <p>
+            Gestisci i tuoi compiti e la tua lista di cose da fare. Rimani
+            organizzato e produttivo.
+          </p>
+          <a href="/user/todos">Visualizza Todo</a>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="action-card" sec:authorize="hasAnyRole('USER', 'ADMIN')">
+          <h3>⚙️ Profilo</h3>
+          <p>
+            Gestisci le impostazioni del tuo profilo, cambia password e aggiorna
+            le tue informazioni.
+          </p>
+          <a href="/user/profile">Modifica Profilo</a>
+        </div>
+      </div>
+
+      <!-- Admin Panel Link (only for ADMIN role) -->
+      <div class="admin-section" sec:authorize="hasRole('ADMIN')">
+        <h3>🛠️ Pannello di Amministrazione</h3>
+        <p>Solo gli amministratori possono accedere a queste funzioni:</p>
+        <br />
+        <a href="/admin/pannello">Pannello Admin</a>
+        <a href="/admin/users">Gestione Utenti</a>
+        <a href="/admin/logs">Visualizza Logs</a>
+      </div>
+
+      <!-- Public Link -->
+      <div class="public-link">
+        <p><a href="/public/hello">🔗 Vai alla pagina pubblica</a></p>
+      </div>
+    </div>
+  </body>
+</html>

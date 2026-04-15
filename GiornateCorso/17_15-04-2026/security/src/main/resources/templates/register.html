@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazione</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 45px;
+            color: #999;
+            font-size: 18px;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .register-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .register-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-error {
+            background-color: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+        }
+
+        .alert-success {
+            background-color: #efe;
+            border: 1px solid #cfc;
+            color: #363;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .links a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            font-size: 12px;
+            display: none;
+        }
+
+        .password-strength.weak {
+            color: #e74c3c;
+        }
+
+        .password-strength.medium {
+            color: #f39c12;
+        }
+
+        .password-strength.strong {
+            color: #27ae60;
+        }
+
+        .requirements {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .requirements h4 {
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .requirements ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .requirements li {
+            font-size: 12px;
+            color: #666;
+            margin: 3px 0;
+        }
+
+        .requirements li.valid {
+            color: #27ae60;
+        }
+
+        .requirements li::before {
+            content: "✗";
+            margin-right: 8px;
+            color: #e74c3c;
+        }
+
+        .requirements li.valid::before {
+            content: "✓";
+            color: #27ae60;
+        }
+
+        @media (max-width: 480px) {
+            .register-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h1>📝 Registrazione</h1>
+        <p class="subtitle">Crea il tuo account sicuro</p>
+
+        <!-- Messaggi di errore/successo -->
+        <div class="alert alert-error" th:if="${error}" th:text="${error}"></div>
+        <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+
+        <!-- Form di registrazione -->
+        <form method="post" action="/register" id="registerForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required
+                       placeholder="Scegli un username" maxlength="50">
+                <span class="input-icon">👤</span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required
+                       placeholder="Crea una password sicura">
+                <span class="input-icon">🔒</span>
+                <div class="password-strength" id="passwordStrength"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Conferma Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required
+                       placeholder="Ripeti la password">
+                <span class="input-icon">🔐</span>
+            </div>
+
+            <div class="requirements">
+                <h4>Requisiti password:</h4>
+                <ul>
+                    <li id="req-length">Almeno 6 caratteri</li>
+                    <li id="req-uppercase">Almeno una lettera maiuscola</li>
+                    <li id="req-lowercase">Almeno una lettera minuscola</li>
+                    <li id="req-number">Almeno un numero</li>
+                </ul>
+            </div>
+
+          
+            <button type="submit" class="register-btn" id="registerBtn">
+                Crea Account
+            </button>
+        </form>
+
+        <div class="links">
+            <p>Hai già un account? <a href="/login">Accedi</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Validazione password in tempo reale
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const registerBtn = document.getElementById('registerBtn');
+        const passwordStrength = document.getElementById('passwordStrength');
+
+        // Requisiti password
+        const requirements = {
+            length: document.getElementById('req-length'),
+            uppercase: document.getElementById('req-uppercase'),
+            lowercase: document.getElementById('req-lowercase'),
+            number: document.getElementById('req-number')
+        };
+
+        function checkPasswordStrength() {
+            const pwd = password.value;
+            let score = 0;
+            let validReqs = 0;
+
+            // Controlla requisiti
+            if (pwd.length >= 6) {
+                requirements.length.classList.add('valid');
+                validReqs++;
+                score += 25;
+            } else {
+                requirements.length.classList.remove('valid');
+            }
+
+            if (/[A-Z]/.test(pwd)) {
+                requirements.uppercase.classList.add('valid');
+                validReqs++;
+                score += 25;
+            } else {
+                requirements.uppercase.classList.remove('valid');
+            }
+
+            if (/[a-z]/.test(pwd)) {
+                requirements.lowercase.classList.add('valid');
+                validReqs++;
+                score += 25;
+            } else {
+                requirements.lowercase.classList.remove('valid');
+            }
+
+            if (/\d/.test(pwd)) {
+                requirements.number.classList.add('valid');
+                validReqs++;
+                score += 25;
+            } else {
+                requirements.number.classList.remove('valid');
+            }
+
+            // Forza password
+            passwordStrength.style.display = pwd.length > 0 ? 'block' : 'none';
+
+            if (score < 50) {
+                passwordStrength.textContent = 'Debole';
+                passwordStrength.className = 'password-strength weak';
+            } else if (score < 75) {
+                passwordStrength.textContent = 'Media';
+                passwordStrength.className = 'password-strength medium';
+            } else {
+                passwordStrength.textContent = 'Forte';
+                passwordStrength.className = 'password-strength strong';
+            }
+
+            return validReqs === 4;
+        }
+
+        function validateForm() {
+            const pwd = password.value;
+            const confirmPwd = confirmPassword.value;
+            const username = document.getElementById('username').value;
+
+            let isValid = true;
+
+            // Username non vuoto
+            if (username.trim().length < 3) {
+                isValid = false;
+            }
+
+            // Password valida
+            if (!checkPasswordStrength()) {
+                isValid = false;
+            }
+
+            // Password corrispondenti
+            if (pwd !== confirmPwd) {
+                confirmPassword.style.borderColor = '#e74c3c';
+                isValid = false;
+            } else {
+                confirmPassword.style.borderColor = '#27ae60';
+            }
+
+            registerBtn.disabled = !isValid;
+            return isValid;
+        }
+
+        // Event listeners
+        password.addEventListener('input', checkPasswordStrength);
+        password.addEventListener('input', validateForm);
+        confirmPassword.addEventListener('input', validateForm);
+        document.getElementById('username').addEventListener('input', validateForm);
+
+        // Validazione iniziale
+        validateForm();
+    </script>
+</body>
+</html>
