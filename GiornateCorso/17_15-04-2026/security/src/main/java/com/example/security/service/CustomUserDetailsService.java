@@ -11,23 +11,19 @@ import com.example.security.repository.UtenteRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-
-    private final UtenteRepository repo;
-
-    public CustomUserDetailsService(UtenteRepository repo) {
-        this.repo = repo;
+    private final UtenteRepository utenteRepository;
+    public CustomUserDetailsService(UtenteRepository utenteRepository) {
+        this.utenteRepository = utenteRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        Utente u = repo.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Utente non trovato"));
-
+        Utente u = utenteRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return User.builder()
                 .username(u.getUsername())
                 .password(u.getPassword())
-                .roles(u.getRuolo()) // "USER" o "ADMIN"
+                .roles(u.getRuolo())
                 .build();
     }
 }

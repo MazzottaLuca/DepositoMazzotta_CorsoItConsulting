@@ -1,6 +1,5 @@
 package com.example.security.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -11,37 +10,22 @@ import jakarta.annotation.PostConstruct;
 
 @Service
 public class CreaAdmin {
+    private final UtenteRepository utenteRepository;
+    private final PasswordEncoder encoder;
 
-    @Autowired
-    private PasswordEncoder encoder;
-
-    @Autowired
-    private UtenteRepository utenteRepository;
+    public CreaAdmin(UtenteRepository utenteRepository, PasswordEncoder encoder) {
+        this.utenteRepository = utenteRepository;
+        this.encoder = encoder;
+    }
 
     @PostConstruct
     public void init() {
         if (utenteRepository.findByUsername("admin").isEmpty()) {
-            Utente nuovo = new Utente();
-            nuovo.setUsername("admin");
-            nuovo.setPassword(encoder.encode("admin123"));
-            nuovo.setRuolo("ADMIN");
-            utenteRepository.save(nuovo);
-
-            System.out.println(" Utente admin creato con successo");
-        } else {
-            System.out.println(" Utente admin già esistente");
-        }
-
-        if (utenteRepository.findByUsername("user").isEmpty()) {
-            Utente nuovoUser = new Utente();
-            nuovoUser.setUsername("user");
-            nuovoUser.setPassword(encoder.encode("user123"));
-            nuovoUser.setRuolo("USER");
-            utenteRepository.save(nuovoUser);
-
-            System.out.println(" Utente user creato con successo");
-        } else {
-            System.out.println(" Utente user già esistente");
+            Utente a = new Utente();
+            a.setUsername("admin");
+            a.setPassword(encoder.encode("admin123"));
+            a.setRuolo("ADMIN");
+            utenteRepository.save(a);
         }
     }
 }
