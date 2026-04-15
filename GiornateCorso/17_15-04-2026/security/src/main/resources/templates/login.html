@@ -121,6 +121,29 @@
             transform: translateY(-1px);
         }
 
+        .register-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 15px;
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .register-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px);
+        }
+
         .alert {
             padding: 15px;
             border-radius: 10px;
@@ -206,6 +229,7 @@
 
         <!-- Form di login -->
         <form method="post" th:action="@{/login}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required placeholder="Inserisci username">
@@ -225,6 +249,7 @@
 
         <div class="links">
             <p>Non hai un account? <a href="/register">Registrati</a></p>
+            
         </div>
 
         <!-- Credenziali di prova -->

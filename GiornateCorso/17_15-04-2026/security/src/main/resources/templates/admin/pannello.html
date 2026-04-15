@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="it"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pannello Amministrazione</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .navbar h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-info p {
+            margin: 3px 0;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .welcome-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .welcome-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .welcome-section p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 18px;
+        }
+
+        .admin-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .admin-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #ff6b6b;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 82, 82, 0.1) 100%);
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+
+        .admin-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .admin-card h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-size: 24px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-card p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-card a {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-card a:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-card h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .back-link a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .admin-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-section {
+                padding: 30px 20px;
+            }
+
+            .welcome-section h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <h1>🛠️ Pannello Amministrazione</h1>
+        <div class="navbar-user">
+            <div class="user-info">
+                <p><strong th:text="'Admin: ' + ${username}"></strong></p>
+                <span class="role-badge">Ruolo: ADMIN</span>
+            </div>
+            <form method="POST" th:action="@{/logout}" style="margin: 0">
+                <button type="submit" class="logout-btn">Esci</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h2>👑 Benvenuto nel Pannello di Amministrazione, <span th:text="${username}"></span>!</h2>
+            <p>
+                Hai accesso completo alle funzioni di amministrazione del sistema.
+                Gestisci utenti, monitora il sistema e configura le impostazioni avanzate.
+            </p>
+
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>100%</h3>
+                    <p>Controllo</p>
+                </div>
+                <div class="stat-card">
+                    <h3>24/7</h3>
+                    <p>Sorveglianza</p>
+                </div>
+                <div class="stat-card">
+                    <h3>∞</h3>
+                    <p>Potere</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Actions -->
+        <div class="admin-actions">
+            <!-- User Management -->
+            <div class="admin-card">
+                <h3>👥 Gestione Utenti</h3>
+                <p>
+                    Visualizza, modifica e gestisci tutti gli account utente del sistema.
+                    Crea nuovi utenti, modifica ruoli e monitora l'attività.
+                </p>
+                <a href="/admin/users">Vai alla Gestione Utenti</a>
+            </div>
+
+            <!-- System Logs -->
+            <div class="admin-card">
+                <h3>📊 Log di Sistema</h3>
+                <p>
+                    Monitora l'attività del sistema, visualizza i log di sicurezza
+                    e traccia gli eventi importanti per il debugging e l'audit.
+                </p>
+                <a href="/admin/logs">Visualizza i Log</a>
+            </div>
+
+            <!-- System Settings -->
+            <div class="admin-card">
+                <h3>⚙️ Impostazioni Sistema</h3>
+                <p>
+                    Configura i parametri del sistema, gestisci le configurazioni
+                    di sicurezza e ottimizza le prestazioni dell'applicazione.
+                </p>
+                <a href="/admin/settings">Impostazioni Avanzate</a>
+            </div>
+
+            <!-- Database Management -->
+            <div class="admin-card">
+                <h3>🗄️ Gestione Database</h3>
+                <p>
+                    Monitora lo stato del database, esegui backup e manutenzione,
+                    gestisci le connessioni e ottimizza le performance.
+                </p>
+                <a href="/admin/database">Pannello Database</a>
+            </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="back-link">
+            <p><a href="/home">← Torna alla Dashboard</a></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -22,6 +22,9 @@ public class Utente {
 
     private String ruolo; // es: "USER", "ADMIN"
 
+    @Column(length = 500)
+    private String refreshToken;
+
     public Utente() {}
 
     public Long getId() {
@@ -54,6 +57,14 @@ public class Utente {
 
     public void setRuolo(String ruolo) {
         this.ruolo = ruolo;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     // Getters e Setters

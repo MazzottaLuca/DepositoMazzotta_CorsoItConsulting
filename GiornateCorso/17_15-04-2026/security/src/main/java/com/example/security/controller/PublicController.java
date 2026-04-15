@@ -3,10 +3,11 @@ package com.example.security.controller;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.security.dto.RegisterRequest;
 import com.example.security.service.UtenteService;
 
 @Controller
@@ -41,20 +42,18 @@ public class PublicController {
     }
 
     @PostMapping("/register")
-    public String registraUtente(@RequestParam String username,
-                                 @RequestParam String password,
-                                 @RequestParam String confirmPassword,
+    public String registraUtente(@ModelAttribute RegisterRequest request,
                                  RedirectAttributes redirectAttributes) {
         try {
-            if (!password.equals(confirmPassword)) {
+            if (!request.getPassword().equals(request.getConfirmPassword())) {
                 redirectAttributes.addFlashAttribute("error", "Le password non corrispondono");
                 return "redirect:/register";
             }
-            if (password.length() < 6) {
+            if (request.getPassword().length() < 6) {
                 redirectAttributes.addFlashAttribute("error", "La password deve essere di almeno 6 caratteri");
                 return "redirect:/register";
             }
-            utenteService.registraUtente(username, password, "USER");
+            utenteService.registraUtente(request.getUsername(), request.getPassword(), "USER");
             redirectAttributes.addFlashAttribute("success", "Registrazione completata! Ora puoi accedere.");
             return "redirect:/login";
         } catch (RuntimeException e) {

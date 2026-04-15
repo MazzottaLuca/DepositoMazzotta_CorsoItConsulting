@@ -31,5 +31,17 @@ public class CreaAdmin {
         } else {
             System.out.println(" Utente admin già esistente");
         }
+
+        if (utenteRepository.findByUsername("user").isEmpty()) {
+            Utente nuovoUser = new Utente();
+            nuovoUser.setUsername("user");
+            nuovoUser.setPassword(encoder.encode("user123"));
+            nuovoUser.setRuolo("USER");
+            utenteRepository.save(nuovoUser);
+
+            System.out.println(" Utente user creato con successo");
+        } else {
+            System.out.println(" Utente user già esistente");
+        }
     }
 }

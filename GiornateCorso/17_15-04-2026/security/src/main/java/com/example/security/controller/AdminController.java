@@ -1,14 +1,28 @@
 package com.example.security.controller;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @RequestMapping("/admin")
 public class AdminController {
 @GetMapping("/pannello")
-public String pannelloAdmin(Authentication auth) {
-return "Benvenuto " + auth.getName() + ", sei un ADMIN.";
+public String pannelloAdmin(Authentication auth, Model model) {
+    model.addAttribute("username", auth.getName());
+    return "admin/pannello";
+}
+
+@GetMapping("/users")
+public String gestioneUtenti(Authentication auth, Model model) {
+    model.addAttribute("username", auth.getName());
+    return "admin/users";
+}
+
+@GetMapping("/logs")
+public String visualizzaLogs(Authentication auth, Model model) {
+    model.addAttribute("username", auth.getName());
+    return "admin/logs";
 }
 }
